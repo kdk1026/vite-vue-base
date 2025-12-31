@@ -3,6 +3,7 @@
         <ul class="ul-style">
             <li class="li-style">
                 <router-link to="/" class="a-style">홈</router-link>
+                <router-link to="/ref" class="a-style">Ref</router-link>
                 <router-link to="/vuex" class="a-style">Vuex</router-link>
             </li>
         </ul>
