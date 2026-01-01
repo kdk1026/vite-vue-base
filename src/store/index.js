@@ -6,7 +6,7 @@ const store = createStore({
     plugins: [
         createPersistedState({
             storage: window.sessionStorage,
-            paths: []
+            paths: ['counter']
         })
     ],
     modules: {
