@@ -9,9 +9,6 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 const app = createApp(App);
 
-/* 안먹힘... */
-app.config.devtools = import.meta.env.MODE !== 'prod';
-
 const head = createHead();
 app.use(head);
 

@@ -31,6 +31,6 @@ export const useCounterStore = defineStore('counter', {
     persist: {
         key: 'my-counter-ky',
         storage: sessionStorage,
-        paths: ['value']
+        pick: ['value']
     }
 });
