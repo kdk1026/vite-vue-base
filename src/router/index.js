@@ -2,10 +2,12 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import Main from "@/pages/sample/Main.vue";
 import Vuex from "@/pages/sample/Vuex.vue";
 import Ref from "@/pages/sample/Ref.vue";
+import Pinia from "@/pages/sample/Pinia.vue";
 
 const routes = [
     { path: '/', component: Main },
     { path: '/vuex', component: Vuex },
+    { path: '/pinia', component: Pinia },
     { path: '/ref', component: Ref }
 ];
 
