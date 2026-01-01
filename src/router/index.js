@@ -28,12 +28,12 @@ const router = createRouter({
     }
 });
 
-const moveMainTarget = [
+const moveMainTarget = new Set([
     '/communication/partner/complete',
     '/communication/visit-before-inquire/complete',
     '/communication/visit-after-inquire/write', '/communication/visit-after-inquire/complete',
     '/login/email'
-];
+]);
 
 /**
  * 💡 전역 before Guard 설정
@@ -52,7 +52,7 @@ router.beforeEach((to, from, next) => {
     const prevURI = sessionStorage.getItem(SESSION_KEY_PREV_URI);
 
     // 1. 특정 경로에서 뒤로가기 시 메인으로 강제 리디렉션
-    if (moveMainTarget.includes(prevURI) && to.path === from.path) {
+    if (moveMainTarget.has(prevURI) && to.path === from.path) {
         // 'POP' 네비게이션이 발생했고, 이전 페이지가 'moveMainTarget'에 포함되는 경우
         // from.path와 to.path가 같다는 것은 브라우저가 POP을 시도했지만, 
         // 우리가 훅에서 저장한 URI 기록에 따르면 이전 URI가 특정 경로였다는 것을 의미합니다.
