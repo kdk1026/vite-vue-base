@@ -1,73 +1,55 @@
-import { ref, watch, onMounted } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 
-export function useApi(apiFunction, initialParams = [], callOnInit = true) {
+export const useApi = (apiFunction, initialParams, callOnInit = true) => {
     const router = useRouter();
 
-    const apiParams = ref(initialParams);
     const apiData = ref(null);
     const apiPaging = ref(null);
-    const prevParams = ref(null);
+    const isLoading = ref(false);
 
-    const callApi = async (params = apiParams.value) => {
-        if ( params[0] instanceof FormData ) {
-            //
-        } else {
-            try {
-                if ( JSON.stringify(params) === JSON.stringify(prevParams.value) ) {
-                    return;
-                }
-                prevParams.value = params;
-            } catch (error) {
-                console.error("JSON 문자열 변환 실패:", error);  
-            }
+    let prevParamsJson = '';
+
+    const callApi = async (...params) => {
+        const currentParams = params.length > 0 ? params : initialParams;
+
+        if ( !(currentParams[0] instanceof FormData) ) {
+            const paramsJson = JSON.stringify(currentParams);
+            if (paramsJson === prevParamsJson) return;
+            prevParamsJson = paramsJson;
         }
 
-        try {
-            const res = await apiFunction(...params);
+        isLoading.value = true;
 
-            if ( res && res.data ) {
-                if ( res.data.list ) {
-                    apiData.value = res.data.list;
-                } else if ( res.data.data ) {
-                    apiData.value = res.data.data;
-                } else {
-                    apiData.value = res.data;
-                }
-    
-                if ( res.data.paging ) {
-                    apiPaging.value = res.data.paging;
-                }
+        try {
+            const res = await apiFunction(...currentParams);
+
+            if ( res?.data ) {
+                const { list, data, paging } = res.data;
+
+                apiData.value = list ?? data ?? res.data;
+                if (paging) apiPaging.value = paging;
             }
 
-            return res ? res.data : nul;
+            return res?.data;
         } catch (error) {
             if ( error.status === 999 ) {
                 router.push("/error-network");
             }
 
             console.log(error);
+            throw error;
+        } finally {
+            isLoading.value = false;
         }
     };
 
-    watch(() => initialParams, (newParams) => {
-        try {
-            if ( JSON.stringify(apiParams.value) !== JSON.stringify(newParams) ) {
-                apiParams.value = newParams;
-            }
-        } catch (error) {
-            console.error("JSON 문자열 변환 실패:", error);  
-        }
-    });
-
     if ( callOnInit ) {
-        onMounted(() => {
-            callApi(apiParams.value);
-        });
+        callApi(...initialParams);
     }
 
     return {
-        apiData, apiPaging,
+        apiData, apiPaging, isLoading,
         callApi,
     };
 }
