@@ -10,7 +10,7 @@
             <details style="white-space: pre-wrap; margin: 15px 0; min-width: 80%; overflow: auto; text-align: left;">
                 <summary style="cursor: pointer; font-weight: bold;">오류 상세 정보 보기</summary>
                 <pre style="color: #721c24; background-color: #f5c6cb; padding: 10px; border-radius: 4px;">
-                    {{ error && error?.message }}
+                    {{ error?.message }}
                 </pre>
             </details>
 
