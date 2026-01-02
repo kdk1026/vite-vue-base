@@ -24,7 +24,7 @@ export const useCookies = () => {
         return $cookies.set(
             name,
             value,
-            updatedOptions.expire,
+            updatedOptions.expires,
             updatedOptions.path,
             updatedOptions.domain,
             updatedOptions.secure,
